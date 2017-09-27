@@ -16,14 +16,15 @@ def run(args, cwd=here, **kwargs):
     )
 
 [name] = sys.argv[1:]
-tag = 'liquidinvestigations/{}:latest-arm32v6'.format(name)
-directory = here / name
-upstream = directory / 'upstream'
-out_name = '{}-arm32v6'.format(name)
-out_path = out_dir / out_name
 
+directory = here / name
 with (directory / 'meta.json').open(encoding='utf8') as f:
     meta = json.load(f)
+
+tag = 'liquidinvestigations/{}:latest-{}'.format(name, meta['arch'])
+upstream = directory / 'upstream'
+out_name = '{}-{}'.format(name, meta['arch'])
+out_path = out_dir / out_name
 
 run(['apt-get', 'update'])
 run(['apt-get', 'install', '-y', 'docker.io'])
