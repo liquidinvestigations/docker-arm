@@ -8,12 +8,9 @@ here = Path(__file__).resolve().parent
 out_dir = Path('/mnt/shared/docker-images')
 
 def run(args, cwd=here, **kwargs):
-    return subprocess.run(
-        [str(a) for a in args],
-        cwd=str(cwd),
-        check=True,
-        **kwargs
-    )
+    args = [str(a) for a in args]
+    print('+', ' '.join(args))
+    return subprocess.run(args, cwd=str(cwd), check=True, **kwargs)
 
 [name] = sys.argv[1:]
 
