@@ -23,8 +23,9 @@ upstream = directory / 'upstream'
 out_name = '{}-{}'.format(name, meta['arch'])
 out_path = out_dir / out_name
 
-run(['apt-get', 'update'])
-run(['apt-get', 'install', '-y', 'docker.io'])
+if subprocess.run(['which', 'docker']).returncode > 0:
+    run(['apt-get', 'update'])
+    run(['apt-get', 'install', '-y', 'docker.io'])
 
 if not upstream.is_dir():
     run(['git', 'clone', meta['upstream'], upstream])
