@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
+import json
+import sys
 import subprocess
 from pathlib import Path
 
-NAME = 'hoover-ui'
-UPSTREAM = 'https://github.com/hoover/ui'
-TAG = 'liquidinvestigations/{}:latest-arm32v6'.format(NAME)
-out_name = '{}-arm32v6'.format(NAME)
 here = Path(__file__).resolve().parent
-upstream = here / 'upstream'
 out_dir = Path('/mnt/shared/docker-images')
-out_path = out_dir / out_name
 
 def run(args, cwd=here, **kwargs):
     return subprocess.run(
@@ -19,17 +15,26 @@ def run(args, cwd=here, **kwargs):
         **kwargs
     )
 
+[name] = sys.argv[1:]
+tag = 'liquidinvestigations/{}:latest-arm32v6'.format(name)
+directory = here / name
+upstream = directory / 'upstream'
+out_name = '{}-arm32v6'.format(name)
+out_path = out_dir / out_name
+
+with (directory / 'meta.json').open(encoding='utf8') as f:
+    meta = json.load(f)
 
 run(['apt-get', 'update'])
 run(['apt-get', 'install', '-y', 'docker.io'])
 
 if not upstream.is_dir():
-    run(['git', 'clone', UPSTREAM, upstream])
+    run(['git', 'clone', meta['upstream'], upstream])
 
-run(['docker', 'build', '.', '--tag', TAG])
+run(['docker', 'build', '.', '--tag', tag], cwd=directory)
 
 if not out_dir.is_dir():
     out_dir.mkdir()
 
 with out_path.open('wb') as out:
-    run(['docker', 'save', TAG], stdout=out)
+    run(['docker', 'save', tag], stdout=out)
