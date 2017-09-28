@@ -3,11 +3,10 @@ with a custom Dockerfile, and save the images to `/mnt/shared/docker-images`.
 
 ### Usage
 Build the images in a
-[buildbot](https://github.com/liquidinvestigations/buildbot) VM:
+[buildbot](https://github.com/liquidinvestigations/buildbot) VM. `TARGET` is
+the path to a docker configuration folder, e.g. `hoover-search`:
 ```
-./build hoover-ui
-./build hoover-snoop
-./build hoover-search
+./build TARGET target.dockers
 ```
 
 Then, import the images from `/mnt/shared/docker-images` on a machine where

@@ -5,23 +5,22 @@ import subprocess
 from pathlib import Path
 
 here = Path(__file__).resolve().parent
-out_dir = Path('/mnt/shared/docker-images')
 
-def run(args, cwd=here, **kwargs):
+def run(args, cwd=None, **kwargs):
     args = [str(a) for a in args]
+    if cwd:
+        kwargs['cwd'] = str(cwd)
     print('+', ' '.join(args))
-    return subprocess.run(args, cwd=str(cwd), check=True, **kwargs)
+    return subprocess.run(args, check=True, **kwargs)
 
-[name] = sys.argv[1:]
-
-directory = here / name
+[directory_str, out] = sys.argv[1:]
+directory = Path(directory_str)
 with (directory / 'config.json').open(encoding='utf8') as f:
     config = json.load(f)
 
-tag = 'liquidinvestigations/{}:latest-{}'.format(name, config['arch'])
+tag = 'liquidinvestigations/{}:latest-{}'.format(directory.name, config['arch'])
 upstream = directory / 'upstream'
-out_name = '{}-{}'.format(name, config['arch'])
-out_path = out_dir / out_name
+out_name = '{}-{}'.format(directory.name, config['arch'])
 
 if subprocess.run(['which', 'docker']).returncode > 0:
     run(['apt-get', 'update'])
@@ -32,8 +31,5 @@ if not upstream.is_dir():
 
 run(['docker', 'build', '.', '--tag', tag], cwd=directory)
 
-if not out_dir.is_dir():
-    out_dir.mkdir()
-
-with out_path.open('wb') as out:
-    run(['docker', 'save', tag], stdout=out)
+with open(out, 'wb') as f:
+    run(['docker', 'save', tag], stdout=f)
