@@ -9,12 +9,10 @@ the path to a docker configuration folder, e.g. `hoover-search`:
 ./build TARGET target.dockers
 ```
 
-Then, import the images from `/mnt/shared/docker-images` on a machine where
-docker is logged in to docker hub, and push them:
+Then, import the images on a machine where docker is logged in to docker hub,
+and push them:
 
 ```
 docker login
-docker push liquidinvestigations/hoover-ui:latest-arm32v6
-docker push liquidinvestigations/hoover-snoop:latest-arm64v8
-docker push liquidinvestigations/hoover-search:latest-arm64v8
+./upload target.dockers
 ```
