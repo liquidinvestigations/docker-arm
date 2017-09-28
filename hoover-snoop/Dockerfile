@@ -15,8 +15,11 @@ RUN apt-get install -y --no-install-recommends \
   p7zip-full p7zip-rar \
   pst-utils \
   cpanminus
-
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN ln -s /usr/bin/python3 /usr/local/bin/python
+RUN ln -s /usr/bin/pip3 /usr/local/bin/pip
+
 RUN cpanm --notest Email::Outlook::Message
 
 RUN mkdir -p /opt/hoover/snoop
