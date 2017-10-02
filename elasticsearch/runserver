@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+cd /usr/share/elasticsearch
+export ES_HEAP_SIZE=256M
+exec bin/elasticsearch -Des.network.host=0.0.0.0
