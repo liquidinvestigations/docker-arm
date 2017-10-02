@@ -11,7 +11,8 @@ RUN apt-get install -y --no-install-recommends \
   build-essential \
   python3 python3-dev python3-pip \
   postgresql-server-dev-all \
-  qrencode
+  qrencode \
+  curl
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN ln -s /usr/bin/python3 /usr/local/bin/python
@@ -30,4 +31,9 @@ RUN ./manage.py downloadassets
 RUN ./manage.py collectstatic --noinput
 RUN rm hoover/site/settings/local.py
 
-CMD waitress-serve --port 80 hoover.site.wsgi:application
+RUN curl https://raw.githubusercontent.com/vishnubob/wait-for-it/8ed92e8c/wait-for-it.sh -o /wait-for-it
+RUN echo '#!/bin/bash -e' > /runserver && \
+    echo 'waitress-serve --port 80 hoover.site.wsgi:application' >> /runserver && \
+    chmod +x /runserver /wait-for-it
+
+CMD /runserver

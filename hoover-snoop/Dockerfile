@@ -14,7 +14,8 @@ RUN apt-get install -y --no-install-recommends \
   postgresql-server-dev-all \
   p7zip-full p7zip-rar \
   pst-utils \
-  cpanminus
+  cpanminus \
+  curl
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN ln -s /usr/bin/python3 /usr/local/bin/python
@@ -30,4 +31,9 @@ RUN pip3 install -r requirements.txt
 
 COPY ./upstream/ ./
 
-CMD waitress-serve --port 80 snoop.site.wsgi:application
+RUN curl https://raw.githubusercontent.com/vishnubob/wait-for-it/8ed92e8c/wait-for-it.sh -o /wait-for-it
+RUN echo '#!/bin/bash -e' > /runserver && \
+    echo 'waitress-serve --port 80 snoop.site.wsgi:application' >> /runserver && \
+    chmod +x /runserver /wait-for-it
+
+CMD /runserver
