@@ -1,6 +1,7 @@
 FROM arm64v8/debian:jessie
 
 ENV PYTHONUNBUFFERED 1
+ENV LANG C.UTF-8
 
 RUN echo 'deb http://deb.debian.org/debian jessie non-free' >> /etc/apt/sources.list
 RUN echo 'deb http://deb.debian.org/debian jessie-updates non-free' >> /etc/apt/sources.list
