@@ -1,16 +1,17 @@
-Scripts to build docker images on ARM. They clone the upstream repo, run Docker
-with a custom Dockerfile, and save the images to `/mnt/shared/docker-images`.
+Scripts to build docker images on ARM and upload them to docker hub.
 
 ### Usage
 Build the images in a
-[buildbot](https://github.com/liquidinvestigations/buildbot) VM. `TARGET` is
-the path to a docker configuration folder, e.g. `hoover-search`:
+[factory](https://github.com/liquidinvestigations/factory) VM. `TARGET` is the
+path to a docker configuration folder, e.g. `hoover-search`. The second
+argument is the path to an output file containing the docker image:
+
 ```
 ./build TARGET target.dockers
 ```
 
-Then, import the images on a machine where docker is logged in to docker hub,
-and push them:
+Then, using a machine where docker is logged into docker hub, import the image
+and push it:
 
 ```
 docker login
