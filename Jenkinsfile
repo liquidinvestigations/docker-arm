@@ -1,4 +1,11 @@
 // vim: ft=groovy
+
+properties([
+    parameters([
+        string(name: 'TARGET', defaultValue: '', description: '')
+    ])
+])
+
 node('arm64') {
     deleteDir()
     checkout scm
