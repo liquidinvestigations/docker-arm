@@ -17,7 +17,7 @@ node('arm64') {
     }
     stage('Build Docker image') {
         sh 'mkdir images'
-        sh 'factory/factory run --smp 2 --memory 1024 --share .:/mnt/docker-arm --share images:/mnt/images time /mnt/docker-arm/build $TARGET'
+        sh 'factory/factory run --smp 2 --memory 1024 --share .:/mnt/docker-arm --share images:/mnt/images time /mnt/docker-arm/build $TARGET /mnt/images/$TARGET.dockers'
     }
     stage('Archive artifacts') {
         def TARGET = System.getEnv('TARGET')
