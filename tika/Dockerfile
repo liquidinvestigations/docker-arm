@@ -6,7 +6,7 @@ ENV TIKA_VERSION 1.16
 ENV TIKA_SERVER_URL https://www.apache.org/dist/tika/tika-server-$TIKA_VERSION.jar
 
 RUN set -e \
- && apt-get update
+ && apt-get update \
  && apt-get install -y \
       openjdk-8-jre-headless curl gdal-bin gnupg tesseract-ocr \
       tesseract-ocr-eng tesseract-ocr-ita tesseract-ocr-fra \
