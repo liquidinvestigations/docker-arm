@@ -19,15 +19,17 @@ with (directory / 'config.json').open(encoding='utf8') as f:
     config = json.load(f)
 
 tag = 'liquidinvestigations/{}:latest-{}'.format(directory.name, config['arch'])
-upstream = directory / 'upstream'
 out_name = '{}-{}'.format(directory.name, config['arch'])
 
 if subprocess.run(['which', 'docker']).returncode > 0:
     run(['apt-get', 'update'])
     run(['apt-get', 'install', '-y', 'docker.io'])
 
-if not upstream.is_dir():
-    run(['git', 'clone', config['upstream'], upstream])
+upstream_url = config.get('upstream')
+if upstream_url:
+    upstream_path = directory / 'upstream'
+    if not upstream_path.is_dir():
+        run(['git', 'clone', upstream_url, upstream_path])
 
 run(['docker', 'build', '.', '--tag', tag], cwd=directory)
 
