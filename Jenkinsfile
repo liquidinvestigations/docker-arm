@@ -1,15 +1,14 @@
 // vim: ft=groovy
 node('arm64') {
-  deleteDir()
-  checkout scm
-  stage('Prepare a Factory') {
-    sh 'git clone https://github.com/liquidinvestigations/factory'
-    sh 'cd factory/images; mkdir cloud-x86_64; cd cloud-x86_64; curl -L https://jenkins.liquiddemo.org/__images__/factory/cloud-x86_64-image.tar.xz | xzcat | tar x'
-    sh 'mkdir images'
-  }
   parallel(
     hoover_search: {
       node('arm64') {
+        deleteDir()
+        checkout scm
+        stage('Prepare a Factory') {
+          sh 'git clone https://github.com/liquidinvestigations/factory'
+          sh 'cd factory/images; mkdir cloud-x86_64; cd cloud-x86_64; curl -L https://jenkins.liquiddemo.org/__images__/factory/cloud-x86_64-image.tar.xz | xzcat | tar x'
+        }
         stage('Build Docker image') {
           def TARGET = 'hoover-search'
           sh 'factory/factory run --smp 2 --memory 1024 --share .:/mnt/docker-arm time /mnt/docker-arm/build $TARGET /mnt/docker-arm/$TARGET.dockers'
@@ -21,6 +20,12 @@ node('arm64') {
     },
     hoover_snoop: {
       node('arm64') {
+        deleteDir()
+        checkout scm
+        stage('Prepare a Factory') {
+          sh 'git clone https://github.com/liquidinvestigations/factory'
+          sh 'cd factory/images; mkdir cloud-x86_64; cd cloud-x86_64; curl -L https://jenkins.liquiddemo.org/__images__/factory/cloud-x86_64-image.tar.xz | xzcat | tar x'
+        }
         stage('Build Docker image') {
           def TARGET = 'hoover-snoop'
           sh 'factory/factory run --smp 2 --memory 1024 --share .:/mnt/docker-arm time /mnt/docker-arm/build $TARGET /mnt/docker-arm/$TARGET.dockers'
@@ -32,6 +37,12 @@ node('arm64') {
     },
     hoover_ui: {
       node('arm64') {
+        deleteDir()
+        checkout scm
+        stage('Prepare a Factory') {
+          sh 'git clone https://github.com/liquidinvestigations/factory'
+          sh 'cd factory/images; mkdir cloud-x86_64; cd cloud-x86_64; curl -L https://jenkins.liquiddemo.org/__images__/factory/cloud-x86_64-image.tar.xz | xzcat | tar x'
+        }
         stage('Build Docker image') {
           def TARGET = 'elasticsearch'
           sh 'factory/factory run --smp 2 --memory 1024 --share .:/mnt/docker-arm time /mnt/docker-arm/build $TARGET /mnt/docker-arm/$TARGET.dockers'
@@ -43,6 +54,12 @@ node('arm64') {
     },
     elasticsearch: {
       node('arm64') {
+        deleteDir()
+        checkout scm
+        stage('Prepare a Factory') {
+          sh 'git clone https://github.com/liquidinvestigations/factory'
+          sh 'cd factory/images; mkdir cloud-x86_64; cd cloud-x86_64; curl -L https://jenkins.liquiddemo.org/__images__/factory/cloud-x86_64-image.tar.xz | xzcat | tar x'
+        }
         stage('Build Docker image') {
           def TARGET = 'hoover-ui'
           sh 'factory/factory run --smp 2 --memory 1024 --share .:/mnt/docker-arm time /mnt/docker-arm/build $TARGET /mnt/docker-arm/$TARGET.dockers'
@@ -54,6 +71,12 @@ node('arm64') {
     },
     tika: {
       node('arm64') {
+        deleteDir()
+        checkout scm
+        stage('Prepare a Factory') {
+          sh 'git clone https://github.com/liquidinvestigations/factory'
+          sh 'cd factory/images; mkdir cloud-x86_64; cd cloud-x86_64; curl -L https://jenkins.liquiddemo.org/__images__/factory/cloud-x86_64-image.tar.xz | xzcat | tar x'
+        }
         stage('Build Docker image') {
           def TARGET = 'tika'
           sh 'factory/factory run --smp 2 --memory 1024 --share .:/mnt/docker-arm time /mnt/docker-arm/build $TARGET /mnt/docker-arm/$TARGET.dockers'
